@@ -1,5 +1,7 @@
 class CalcController{
     constructor(){
+        this._lastOperator = "";
+        this._lastNumber = "";
 
         this._operation = [];
         this._displayCalcEl = document.querySelector("#display");
@@ -74,9 +76,23 @@ class CalcController{
         }
     }
 
+    getResult(){
+        return eval(this._operation.join(""));
+    }
+
     calc(){
-        let last = this._operation.pop();
-        let result = eval(this._operation.join(""));
+
+        let last = '';
+
+        if(this._operation.length > 3){
+            last = this._operation.pop();
+
+            let result = this.getResult();
+
+        }
+
+
+        let result = this.getResult();
 
         if (last == "%"){
 
@@ -86,8 +102,9 @@ class CalcController{
 
         } else{
 
+            this._operation = [result];
 
-            this._operation = [result, last];
+            if(last) this._operation.push(last);
         }
 
         this.setLastNumberToDisplay();
@@ -169,7 +186,7 @@ class CalcController{
                 this.addOperation("%");
                 break;
             case 'igual':
-                
+                this.calc();
                 break;
             case'ponto':
                 this.addOperation(".");
